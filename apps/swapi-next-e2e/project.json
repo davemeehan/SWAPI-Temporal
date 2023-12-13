@@ -1,0 +1,26 @@
+{
+  "name": "swapi-next-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/swapi-next-e2e/src",
+  "targets": {
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/swapi-next-e2e/cypress.config.ts",
+        "testingType": "e2e",
+        "devServerTarget": "swapi-next:serve"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "swapi-next:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["swapi-next"]
+}

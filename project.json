@@ -1,0 +1,15 @@
+{
+  "root": ".",
+  "generators": {},
+  "targets": {
+    "temporal:server": {
+      "command": "temporal server start-dev"
+    },
+    "temporal:ui": {
+      "command": "open http://localhost:8233"
+    },
+    "temporal:worker": {
+      "command": "nx serve swapi-worker"
+    }
+  }
+}
