@@ -10,6 +10,9 @@
     },
     "temporal:worker": {
       "command": "nx serve swapi-worker"
+    },
+    "envy": {
+      "command": "npx @envyjs/webui"
     }
   }
 }

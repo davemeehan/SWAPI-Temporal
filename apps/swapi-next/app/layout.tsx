@@ -2,9 +2,7 @@ import ColorModeSelector from '@swapi-next/components/ColorModeSelector';
 import './global.css';
 import { Theme } from '@swapi-next/components/theme';
 import { Box } from '@mui/material';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
-const queryClient = new QueryClient();
+import Script from 'next/script';
 
 export const metadata = {
   title: 'Welcome to org',
@@ -17,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" data-mui-color-scheme="dark">
       <body>
         <Theme>
           <Box>

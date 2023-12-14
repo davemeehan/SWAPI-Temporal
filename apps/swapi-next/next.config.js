@@ -1,25 +1,33 @@
 //@ts-check
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { composePlugins, withNx } = require("@nx/next")
+const { composePlugins, withNx } = require('@nx/next');
+const { withEnvy } = require('@envyjs/nextjs');
+
+const envyConfig = {
+  serviceName: 'NextJS',
+};
 
 /**
  * @type {import('@nx/next/plugins/with-nx').WithNxOptions}
  **/
-const nextConfig = {
+const nextConfig = withEnvy(
+  {
     nx: {
-        // Set this to true if you would like to to use SVGR
-        // See: https://github.com/gregberge/svgr
-        svgr: false,
+      // Set this to true if you would like to to use SVGR
+      // See: https://github.com/gregberge/svgr
+      svgr: false,
     },
     experimental: {
-        taint: true,
+      taint: true,
     },
-}
+  },
+  envyConfig
+);
 
 const plugins = [
-    // Add more Next.js plugins to this list if needed.
-    withNx,
-]
+  // Add more Next.js plugins to this list if needed.
+  withNx,
+];
 
-module.exports = composePlugins(...plugins)(nextConfig)
+module.exports = composePlugins(...plugins)(nextConfig);

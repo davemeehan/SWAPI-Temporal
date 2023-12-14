@@ -4,6 +4,7 @@ import {
   Box,
   CircularProgress,
   Paper,
+  Popover,
   Tooltip,
   Typography,
 } from '@mui/material';
@@ -13,6 +14,7 @@ import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useQuery } from '@tanstack/react-query';
 import { EXECUTION_STATUS } from '@libs/types';
+import { WorkflowGridResult } from './WorkflowGridResult';
 
 function transformStatus(status: string) {
   switch (status) {
@@ -22,6 +24,10 @@ function transformStatus(status: string) {
       return 'Running';
     case EXECUTION_STATUS.FAILED:
       return 'Failed';
+    case EXECUTION_STATUS.TERMINATED:
+      return 'Terminated';
+    case EXECUTION_STATUS.CANCELED:
+      return 'Canceled';
     default:
       return 'Unknown';
   }
@@ -49,6 +55,8 @@ const columns: GridColDef[] = [
         ),
         [EXECUTION_STATUS.RUNNING]: <HourglassBottomIcon />,
         [EXECUTION_STATUS.FAILED]: <CancelIcon sx={{ color: 'red' }} />,
+        [EXECUTION_STATUS.TERMINATED]: <CancelIcon sx={{ color: 'red' }} />,
+        [EXECUTION_STATUS.CANCELED]: <CancelIcon sx={{ color: 'red' }} />,
       };
       const statusIcon = statusIcons[params.row.status] ?? <HelpCenterIcon />;
       return (
@@ -91,7 +99,12 @@ const columns: GridColDef[] = [
       if (params.row.status === EXECUTION_STATUS.RUNNING) {
         return null;
       }
-      return JSON.stringify(params.row.result);
+      return (
+        <WorkflowGridResult
+          workflowId={params.row.execution.workflowId}
+          runId={params.row.execution.runId}
+        />
+      );
     },
   },
 ];
@@ -105,7 +118,8 @@ export default function WorkflowList({
     queryKey: ['workflows'],
     queryFn: async () => {
       const res = await fetch('/api/swapi/workflows');
-      return (await res.json()).data.executions;
+      const data = await res.json();
+      return data.data?.executions ?? [];
     },
     initialData: rows.executions,
     // Refetch the data every 3 seconds
@@ -124,7 +138,7 @@ export default function WorkflowList({
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <DataGrid
-          rows={data}
+          rows={data ?? []}
           columns={columns}
           initialState={{
             pagination: {
@@ -134,6 +148,12 @@ export default function WorkflowList({
           getRowId={(row) => row.execution.runId}
           pageSizeOptions={[5, 10]}
           checkboxSelection
+          disableRowSelectionOnClick
+          sx={{
+            '& .MuiDataGrid-overlayWrapper': {
+              minHeight: 200,
+            },
+          }}
         />
       </Paper>
     </Box>

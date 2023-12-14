@@ -22,8 +22,6 @@ export async function workflowSequence(activities: WorkflowActivities) {
     const [key, rulesFilter] = activity;
     const activityData = await activityFns[key]();
     data[key] = applyFilter(activityData, rulesFilter);
-
-    console.log(`resolved activityData ${key}`, data[key]);
   }
   return data;
 }

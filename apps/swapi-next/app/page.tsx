@@ -1,11 +1,11 @@
-import WorkflowList from '@swapi-next/components/WorkflowList';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2/Grid2';
 import WorkflowActions from '@swapi-next/components/WorkflowActions';
-import { revalidatePath } from 'next/cache';
 import '@swapi-next/env';
 import { getWorkflows } from './api/swapi/workflows/getWorkflows';
 import { Workflows } from '@swapi-next/components/Workflows';
+import { ClientTypography } from '@swapi-next/components/ClientTypography';
+import { revalidatePath } from 'next/cache';
 
 export default async function Index() {
   async function getData() {
@@ -14,7 +14,9 @@ export default async function Index() {
   const rows = await getData();
   return (
     <Box sx={{ flexGrow: 1, width: '80vw', maxWidth: 1024 }}>
-      <h1>Workflows</h1>
+      <ClientTypography component="h1" variant="h2">
+        Workflows
+      </ClientTypography>
       <WorkflowActions
         onCreate={async () => {
           'use server';

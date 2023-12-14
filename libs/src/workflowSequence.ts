@@ -3,6 +3,7 @@ import { temporalClient } from './client';
 import { SwapiRequest } from './schema';
 import { workflowSequence } from './workflows';
 import { WorkflowActivities } from './types';
+import { wfIdPrefix } from './constants';
 
 export async function startWorkflowSequence({
   requestId,
@@ -16,7 +17,7 @@ export async function startWorkflowSequence({
     taskQueue: process.env.SWAPI_QUEUE_NAME,
     args: [activities],
     // in practice, use a meaningful business ID, like customerId or transactionId
-    workflowId: `wf-id-${requestId}`,
+    workflowId: `${wfIdPrefix}${requestId}`,
   });
 }
 
@@ -32,7 +33,10 @@ export async function queryWorkflowSequence({
   while (!data && failures < 3) {
     try {
       const client = await temporalClient();
-      const handle = client.workflow.getHandle(`wf-id-${requestId}`, runId);
+      const handle = client.workflow.getHandle(
+        `${wfIdPrefix}${requestId}`,
+        runId
+      );
       data = await handle.query('getWorkflowSequence', handle);
     } catch (e) {
       if (!(e instanceof QueryNotRegisteredError)) {

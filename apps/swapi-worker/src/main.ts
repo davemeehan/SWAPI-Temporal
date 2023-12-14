@@ -1,3 +1,6 @@
+import { enableTracing } from '@envyjs/node';
+enableTracing({ serviceName: 'Temporal Worker' });
+
 import { Worker } from '@temporalio/worker';
 import * as activities from '@libs/activities';
 

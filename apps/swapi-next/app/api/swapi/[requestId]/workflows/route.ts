@@ -1,6 +1,7 @@
 import { SwapiRequest } from '@libs/schema';
 import { NextRequest, NextResponse } from 'next/server';
 import { getWorkflows } from './getWorkflows';
+import { wfIdPrefix } from '@libs/constants';
 
 export async function GET(
   req: NextRequest,
@@ -8,6 +9,6 @@ export async function GET(
 ) {
   const searchParams = req.nextUrl.searchParams;
   const runId = searchParams.get('runId') ?? undefined;
-  const data = await getWorkflows(params.requestId, runId);
+  const data = await getWorkflows(`${wfIdPrefix}${params.requestId}`, runId);
   return NextResponse.json({ data });
 }

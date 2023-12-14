@@ -1,16 +1,23 @@
+import { CriteriaType, RuleType } from './schema';
+import { SwapiData } from './types';
+
 type Value = string | number;
 type RulePredicate = (
   value1: Value,
   value2: Value
 ) => (...args: any[]) => boolean;
 
-export const rulePredicates: Record<string, RulePredicate> = {
+const _rulePredicates = {
   eq,
   neq,
   contains,
   icontains,
   ncontains,
-};
+} as const;
+
+export type RulePredicateKeys = keyof typeof _rulePredicates;
+export const rulePredicates: Record<RulePredicateKeys, RulePredicate> =
+  _rulePredicates;
 
 export function eq(value1: Value, value2: Value): ReturnType<RulePredicate> {
   return function apply() {
@@ -40,33 +47,14 @@ export function icontains(value1: Value, value2: Value) {
   };
 }
 
-/*
-{
-  type: 'or',
-  criteria: [
-    {
-      type: 'and',
-      criteria: [
-        {type: 'rule', propertyName: 'name', operator: 'eq', value: 'Luke'},
-        {type: 'rule', propertyName: 'age', operator: 'eq', value: '23'},
-      ]
-    },
-    {
-      type: 'or',
-      criteria: [
-        {type: 'rule', propertyName: 'age', operator: 'eq', value: '23'},
-        {type: 'rule', propertyName: 'eye_color', operator: 'eq', value: 'red'},
-      ]
-    },
-  ]
-}
-*/
-export function applyFilter(data: any[], filter: any): any[] {
-  // console.log("applyFilter", { data, filter })
+export function applyFilter(
+  data: SwapiData[],
+  filter: CriteriaType | RuleType
+): SwapiData[] {
   if (!Object.keys(filter).length) {
     return data;
   }
-  return data.filter((item) => {
+  return data?.filter((item) => {
     if (filter.type === 'and') {
       return filter.criteria.every((criterion: any) =>
         matchesCriterion(item, criterion)
@@ -80,11 +68,14 @@ export function applyFilter(data: any[], filter: any): any[] {
   });
 }
 
-export function matchesCriterion(item: any, criterion: any): boolean {
+export function matchesCriterion(
+  item: SwapiData,
+  criterion: RuleType
+): boolean {
   if (criterion.type === 'rule') {
     const { propertyName, operator, value } = criterion;
     if (!item[propertyName]) {
-      throw new Error(`Invalid property name: ${propertyName}`);
+      throw new Error(`Invalid property name: "${propertyName}"`);
     }
     if (!rulePredicates[operator]) {
       throw new Error(`Invalid operator: ${operator}`);

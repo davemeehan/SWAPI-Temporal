@@ -8,8 +8,8 @@ export async function getWorkflows(
   const connection = await temporalConnection();
   const response = await connection.workflowService.listWorkflowExecutions({
     namespace: 'default',
-    pageSize: 10,
-    query: `WorkflowId = "wf-id-${requestId}" ${
+    pageSize: 20,
+    query: `WorkflowId = "${requestId}" ${
       runId ? `and RunId = "${runId}"` : ''
     }`,
   });
