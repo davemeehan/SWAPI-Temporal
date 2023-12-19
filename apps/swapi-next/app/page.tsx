@@ -17,12 +17,7 @@ export default async function Index() {
       <ClientTypography component="h1" variant="h2">
         Workflows
       </ClientTypography>
-      <WorkflowActions
-        onCreate={async () => {
-          'use server';
-          revalidatePath('/');
-        }}
-      />
+      <WorkflowActions />
       <Grid xs={12}>
         <Workflows rows={rows} />
       </Grid>
