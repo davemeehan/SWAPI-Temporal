@@ -19,10 +19,9 @@ What things you need to install the software and how to install them:
 
 A step by step series of examples that tell you how to get a development environment running:
 
-1. Clone the repository: `git clone <repository-url>`.
-2. Navigate into the cloned repository: `cd <repository-name>`.
+1. Clone the repository: `git clone https://github.com/davemeehan/SWAPI-Temporal`.
+2. Navigate into the cloned repository: `cd SWAPI-Temporal`.
 3. Install the dependencies: `npm install`.
-   Z
 
 ## Running the Application
 
