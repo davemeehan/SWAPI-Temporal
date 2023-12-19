@@ -27,20 +27,3 @@ export function removeEmptyFilters(activities: WorkflowActivities) {
 
   return filtered;
 }
-
-/*
-
-{
-  "people": {
-    "type": "or",
-    "criteria": [
-      {
-        "propertyName": "name",
-        "operator": "eq",
-        "value": "RUBBBISHSHHH",
-        "type": "rule"
-      }
-    ]
-  }
-}
-*/
